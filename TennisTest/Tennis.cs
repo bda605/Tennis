@@ -29,24 +29,39 @@ namespace TennisTest
         {
             if (IsScoreDiff(firstPlayerScore, secondPlayerScore))
             {
-                if (firstPlayerScore > 3 || secondPlayerScore > 3)
+                if (IsReadyForGamePoint(firstPlayerScore, secondPlayerScore))
                 {
-                    if (Math.Abs(firstPlayerScore - secondPlayerScore) == 1)
-                    {
-                        var advPlayer = AdvPlayer(firstPlayerScore, secondPlayerScore);
-                        return $"{advPlayer} Adv";
-                    }
-
-                    return $"{AdvPlayer(firstPlayerScore, secondPlayerScore)} Win";
+                    return AdvStatus(firstPlayerScore, secondPlayerScore);
                 }
-
-                return $"{_scoreLookup[firstPlayerScore]} {_scoreLookup[secondPlayerScore]}";
+                return ScoreLookup(firstPlayerScore, secondPlayerScore);
             }
             if (IsDeuce(firstPlayerScore))
             {
                 return Deuce();
             }
             return SameScore(firstPlayerScore);
+        }
+
+        private string ScoreLookup(int firstPlayerScore, int secondPlayerScore)
+        {
+            return $"{_scoreLookup[firstPlayerScore]} {_scoreLookup[secondPlayerScore]}";
+        }
+
+        private string AdvStatus(int firstPlayerScore, int secondPlayerScore)
+        {
+            return IsAdv(firstPlayerScore, secondPlayerScore)
+                ? $"{AdvPlayer(firstPlayerScore, secondPlayerScore)} Adv"
+                : $"{AdvPlayer(firstPlayerScore, secondPlayerScore)} Win";
+        }
+
+        private static bool IsAdv(int firstPlayerScore, int secondPlayerScore)
+        {
+            return Math.Abs(firstPlayerScore - secondPlayerScore) == 1;
+        }
+
+        private static bool IsReadyForGamePoint(int firstPlayerScore, int secondPlayerScore)
+        {
+            return firstPlayerScore > 3 || secondPlayerScore > 3;
         }
 
         private string AdvPlayer(int _firstPlayerScoreTimes, int _secondPlayerScoreTimes)
